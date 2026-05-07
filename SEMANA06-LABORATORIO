@@ -1,0 +1,124 @@
+
+//CLASE COLA CIRCULAR
+package Libreria;
+
+public class ColaCircular {
+    private int[] arreglo;
+    private int frente, fin, capacidad, tamanoActual;
+
+    public ColaCircular(int capacidad) {
+        this.capacidad = capacidad;
+        this.arreglo = new int[capacidad];
+        this.frente = 0;
+        this.fin = -1;
+        this.tamanoActual = 0;
+    }
+
+//CLASE COLA ENLAZADA
+package Libreria;
+
+public class ColaEnlazada {
+    private Nodo frente, fin;
+
+    public void enqueue(int dato) {
+        Nodo nuevo = new Nodo(dato);
+        if (fin == null) {
+            frente = fin = nuevo;
+        } else {
+            fin.siguiente = nuevo;
+            fin = nuevo;
+        }
+    }
+
+    public int dequeue() {
+        if (frente == null) return -1;
+        int valor = frente.dato;
+        
+        //Liberar memoria desconectando el nodo
+        Nodo temporal = frente;
+        frente = frente.siguiente;
+        temporal.siguiente = null; 
+        
+        if (frente == null) fin = null;
+        return valor;
+    }
+}
+
+
+//CLASE COLA PRIORIDAD 
+package Libreria;
+
+public class ColaPrioridad {
+    private Nodo frente;
+
+    public void enqueue(int dato) {
+        Nodo nuevo = new Nodo(dato);
+        // Si está vacía o el dato tiene más prioridad (es menor) que el primero
+        if (frente == null || dato < frente.dato) {
+            nuevo.siguiente = frente;
+            frente = nuevo;
+        } else {
+            Nodo actual = frente;
+            while (actual.siguiente != null && actual.siguiente.dato <= dato) {
+                actual = actual.siguiente;
+            }
+            nuevo.siguiente = actual.siguiente;
+            actual.siguiente = nuevo;
+        }
+    }
+
+    public int dequeue() {
+        if (frente == null) return -1;
+        int valor = frente.dato;
+        frente = frente.siguiente;
+        return valor;
+    }
+}
+
+
+//MAIN PRINCIPAL
+
+package semana06;
+import Libreria.*;
+import java.util.*;
+
+
+public class SEMANA06 {
+
+    public static void main(String[] args) {
+    // Circular
+    Libreria.ColaCircular c1 = new Libreria.ColaCircular(5);
+    c1.enqueue(10);
+    System.out.println("Circular sacó: " + c1.dequeue());
+
+    // Enlazada
+    Libreria.ColaEnlazada c2 = new Libreria.ColaEnlazada();
+    c2.enqueue(20);
+    System.out.println("Enlazada sacó: " + c2.dequeue());
+
+    Libreria.ColaPrioridad c3 = new Libreria.ColaPrioridad();
+    c3.enqueue(50);
+    c3.enqueue(10); // El 10 debería salir primero por ser menor
+    System.out.println("Prioridad sacó: " + c3.dequeue());
+        }
+    }
+
+    public void enqueue(int elemento) {
+        if (tamanoActual == capacidad) {
+            System.out.println("Cola Circular Llena");
+            return;
+        }
+      
+        fin = (fin + 1) % capacidad;
+        arreglo[fin] = elemento;
+        tamanoActual++;
+    }
+
+    public int dequeue() {
+        if (tamanoActual == 0) return -1;
+        int valor = arreglo[frente];
+        frente = (frente + 1) % capacidad;
+        tamanoActual--;
+        return valor;
+    }
+}
