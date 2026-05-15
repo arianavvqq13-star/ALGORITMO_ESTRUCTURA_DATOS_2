@@ -1,0 +1,74 @@
+public class Nodo {
+    int dato; // El valor que guardas
+    Nodo siguiente; // El enlace al siguiente nodo
+
+    // Constructor para inicializar el nodo
+    public Nodo(int dato) {
+        this.dato = dato;
+        this.siguiente = null;
+    }
+}
+
+public class ListaEnlazada {
+    Nodo cabeza;
+
+    public ListaEnlazada() {
+        this.cabeza = null;
+    }
+
+    // Método para agregar datos (para poder probar)
+    public void agregar(int dato) {
+        Nodo nuevo = new Nodo(dato);
+        if (cabeza == null) {
+            cabeza = nuevo;
+        } else {
+            Nodo temp = cabeza;
+            while (temp.siguiente != null) {
+                temp = temp.siguiente;
+            }
+            temp.siguiente = nuevo;
+        }
+    }
+
+    // --- AQUÍ INSERTAS LOS ALGORITMOS ---
+    
+    // 1. Inversión
+    public void invertir() {
+        Nodo previo = null, actual = cabeza, siguiente;
+        while (actual != null) {
+            siguiente = actual.siguiente;
+            actual.siguiente = previo;
+            previo = actual;
+            actual = siguiente;
+        }
+        cabeza = previo;
+    }
+
+    // 2. Detección de Ciclos (Floyd)
+    public boolean tieneCiclo() {
+        Nodo lento = cabeza, rapido = cabeza;
+        while (rapido != null && rapido.siguiente != null) {
+            lento = lento.siguiente;
+            rapido = rapido.siguiente.siguiente;
+            if (lento == rapido) return true;
+        }
+        return false;
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        ListaEnlazada lista = new ListaEnlazada();
+        
+        // Agregar datos de prueba
+        lista.agregar(10);
+        lista.agregar(20);
+        lista.agregar(30);
+
+        System.out.println("Invirtiendo lista...");
+        lista.invertir();
+        
+        // Aquí podrías imprimir para verificar
+    }
+}
