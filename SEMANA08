@@ -1,3 +1,5 @@
+
+//CLASE NODO
 public class Nodo {
     int dato; // El valor que guardas
     Nodo siguiente; // El enlace al siguiente nodo
@@ -9,66 +11,236 @@ public class Nodo {
     }
 }
 
+//CLASE LISTA ENLAZADA
+package Libreria;
 public class ListaEnlazada {
+
     Nodo cabeza;
 
-    public ListaEnlazada() {
-        this.cabeza = null;
-    }
+    // Insertar al final
+    public void insertarFinal(int dato) {
 
-    // Método para agregar datos (para poder probar)
-    public void agregar(int dato) {
         Nodo nuevo = new Nodo(dato);
+
         if (cabeza == null) {
             cabeza = nuevo;
         } else {
+
             Nodo temp = cabeza;
+
             while (temp.siguiente != null) {
                 temp = temp.siguiente;
             }
+
             temp.siguiente = nuevo;
         }
     }
 
-    // --- AQUÍ INSERTAS LOS ALGORITMOS ---
-    
-    // 1. Inversión
-    public void invertir() {
-        Nodo previo = null, actual = cabeza, siguiente;
-        while (actual != null) {
-            siguiente = actual.siguiente;
-            actual.siguiente = previo;
-            previo = actual;
-            actual = siguiente;
+    // Mostrar lista
+    public void mostrar() {
+
+        Nodo temp = cabeza;
+
+        while (temp != null) {
+            System.out.print(temp.dato + " -> ");
+            temp = temp.siguiente;
         }
-        cabeza = previo;
+
+        System.out.println("NULL");
     }
 
-    // 2. Detección de Ciclos (Floyd)
-    public boolean tieneCiclo() {
-        Nodo lento = cabeza, rapido = cabeza;
-        while (rapido != null && rapido.siguiente != null) {
-            lento = lento.siguiente;
-            rapido = rapido.siguiente.siguiente;
-            if (lento == rapido) return true;
+    // Invertir lista
+    public void invertirLista() {
+
+        Nodo anterior = null;
+        Nodo actual = cabeza;
+        Nodo siguiente = null;
+
+        while (actual != null) {
+
+            siguiente = actual.siguiente;
+
+            actual.siguiente = anterior;
+
+            anterior = actual;
+
+            actual = siguiente;
         }
+
+        cabeza = anterior;
+
+        System.out.println("Lista invertida correctamente");
+    }
+
+    // Detectar ciclo usando Floyd
+    public boolean tieneCiclo() {
+
+        Nodo lento = cabeza;
+        Nodo rapido = cabeza;
+
+        while (rapido != null && rapido.siguiente != null) {
+
+            lento = lento.siguiente;
+
+            rapido = rapido.siguiente.siguiente;
+
+            if (lento == rapido) {
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    // Fusionar dos listas ordenadas
+    public static ListaEnlazada fusionar(ListaEnlazada l1, ListaEnlazada l2) {
+
+        ListaEnlazada nueva = new ListaEnlazada();
+
+        Nodo a = l1.cabeza;
+        Nodo b = l2.cabeza;
+
+        while (a != null && b != null) {
+
+            if (a.dato < b.dato) {
+                nueva.insertarFinal(a.dato);
+                a = a.siguiente;
+            } else {
+                nueva.insertarFinal(b.dato);
+                b = b.siguiente;
+            }
+        }
+
+        while (a != null) {
+            nueva.insertarFinal(a.dato);
+            a = a.siguiente;
+        }
+
+        while (b != null) {
+            nueva.insertarFinal(b.dato);
+            b = b.siguiente;
+        }
+
+        return nueva;
     }
 }
 
 
-public class Main {
-    public static void main(String[] args) {
-        ListaEnlazada lista = new ListaEnlazada();
-        
-        // Agregar datos de prueba
-        lista.agregar(10);
-        lista.agregar(20);
-        lista.agregar(30);
+//CLASE PRINCIPAL
 
-        System.out.println("Invirtiendo lista...");
-        lista.invertir();
-        
-        // Aquí podrías imprimir para verificar
+
+package semana08;
+import Libreria.*;
+import java.util.*;
+public class SEMANA08 {
+
+    public static void main(String[] args) {
+
+       Scanner sc = new Scanner(System.in);
+
+        ListaEnlazada lista = new ListaEnlazada();
+
+        int opcion;
+        int valor;
+
+        do {
+
+            System.out.println("\n===== MENU =====");
+            System.out.println("1. Insertar datos");
+            System.out.println("2. Mostrar lista");
+            System.out.println("3. Invertir lista");
+            System.out.println("4. Detectar ciclo");
+            System.out.println("5. Fusionar listas");
+            System.out.println("6. Salir");
+
+            System.out.print("Seleccione una opcion: ");
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+
+                case 1:
+
+                    System.out.print("Ingrese valor: ");
+                    valor = sc.nextInt();
+
+                    lista.insertarFinal(valor);
+
+                    System.out.println("Dato insertado");
+
+                    break;
+
+                case 2:
+
+                    System.out.println("\nLista actual:");
+
+                    lista.mostrar();
+
+                    break;
+
+                case 3:
+
+                    System.out.println("\nLista original:");
+                    lista.mostrar();
+
+                    lista.invertirLista();
+
+                    System.out.println("Lista invertida:");
+                    lista.mostrar();
+
+                    break;
+
+                case 4:
+
+                    if (lista.tieneCiclo()) {
+                        System.out.println("La lista SI tiene ciclo");
+                    } else {
+                        System.out.println("La lista NO tiene ciclo");
+                    }
+
+                    break;
+
+                case 5:
+
+                    ListaEnlazada lista1 = new ListaEnlazada();
+                    ListaEnlazada lista2 = new ListaEnlazada();
+
+                    // Lista 1
+                    lista1.insertarFinal(1);
+                    lista1.insertarFinal(3);
+                    lista1.insertarFinal(5);
+
+                    // Lista 2
+                    lista2.insertarFinal(2);
+                    lista2.insertarFinal(4);
+                    lista2.insertarFinal(6);
+
+                    System.out.println("\nLista 1:");
+                    lista1.mostrar();
+
+                    System.out.println("Lista 2:");
+                    lista2.mostrar();
+
+                    ListaEnlazada fusionada;
+
+                    fusionada = ListaEnlazada.fusionar(lista1, lista2);
+
+                    System.out.println("Lista fusionada:");
+
+                    fusionada.mostrar();
+
+                    break;
+
+                case 6:
+
+                    System.out.println("Programa finalizado");
+
+                    break;
+
+                default:
+
+                    System.out.println("Opcion invalida");
+            }
+
+        } while (opcion != 6);
     }
 }
